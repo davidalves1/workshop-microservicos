@@ -10,7 +10,7 @@ services:
       - productapp-redis
 
   productapp-nginx:
-    build: ./.nginx
+    build: ./.docker/nginx
     restart: "no"
     ports:
       - "8001:80"
