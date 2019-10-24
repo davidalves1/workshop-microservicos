@@ -1,37 +1,39 @@
 version: '3'
 
 services:
-  productapp:
+  stockapp:
     build: .
-    volumes:
-      - ./:/var/www
-    depends_on:
-      - productapp-mysql
-      - productapp-redis
-
-  productapp-nginx:
-    build: ./.docker/nginx
-    restart: "no"
     ports:
-      - "8001:80"
+      - 8001:8001
     volumes:
-      - ./:/var/www
+      - ./:/usr/app
     depends_on:
-      - productapp 
+      - stockapp-mysql
+      - stockapp-redis
 
-  productapp-mysql:
-    image: mysql:5.7.22
+  stockapp-mysql:
+    image: mariadb:10.3
     command: --innodb-use-native-aio=0
     restart: "no"
     ports:
-      - 33006
+      - 33006:3306
     volumes:
       - "./.docker/dbdata:/var/lib/mysql"
     environment:
-      MYSQL_DATABASE: productapp
-      MYSQL_ROOT_PASSWORD: admin123
+      MYSQL_DATABASE: stockapp
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: admin123
+      MYSQL_ROOT_PASSWORD: root123
 
-  productapp-redis:
+  stockapp-adminer:
+    image: adminer:latest
+    restart: "no"
+    ports:
+      - 8080:8080
+    depends_on:
+      - stockapp-mysql
+
+  stockapp-redis:
     image: redis:alpine
-    expose: 
+    expose:
       - 6379
