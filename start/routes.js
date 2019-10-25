@@ -17,5 +17,8 @@
 const Route = use('Route')
 
 Route.get('/', () => {
-  return { greeting: 'Hello world in JSON' }
+  return { msg: 'It Work' }
 })
+
+Route.get('products', 'ProductController.index')
+Route.post('products', 'ProductController.store')
